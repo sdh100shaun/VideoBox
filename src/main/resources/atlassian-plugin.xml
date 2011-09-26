@@ -1,0 +1,38 @@
+<atlassian-plugin key="${project.groupId}.${project.artifactId}" name="${project.name}" plugins-version="2">
+    <plugin-info>
+        <description>${project.description}</description>
+        <version>${project.version}</version>
+        <vendor name="${project.organization.name}" url="${project.organization.url}" />
+    </plugin-info>
+    <web-resource name="videobox resources" key="videobox-js">
+        <description>Videobox resources</description>
+        <resource name="videobox.js" type="download" location="templates/js/swfobject.js">
+            </resource>
+        <dependency>confluence.web.resources:ajs</dependency>
+
+    </web-resource>
+
+
+
+    <macro name="videobox" class="uk.ac.nottingham.confluence.plugins.VideoBoxMacro" key="videobox"
+           icon="/download/resources/${project.groupId}.${project.artifactId}:${project.artifactId}/icons/videoboxicon.png">
+    <resource key="icons" name="icons/" type="download" location="icons/"/>
+    <resource key="icons" name="js/" type="download" location="templates/js/"/>
+
+    <description>A macro to display an overlaid video box</description> 
+    <parameters>
+    	<parameter name="width" type="string" default="500px">
+
+        </parameter>
+    	<parameter name="height" type="string" default="500px"/>
+    	<parameter name="url" type="string" required="true"/>
+    	<parameter name="firstframe" type="string" default=""/>
+        <parameter name="image" type="string" default="" description="Name of image "/>
+        
+    </parameters>
+    </macro>
+    
+    
+
+    
+</atlassian-plugin>

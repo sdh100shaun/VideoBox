@@ -1,0 +1,98 @@
+#requireResource("uk.ac.nottingham.confluence.plugins.videobox:videobox-js")
+
+#macro(pad $value)
+     #set($padded=0)
+     #set($padded = $padded.parseInt($value)+70)
+
+     $padded
+#end
+
+ #set($identifier='movie'+$movie.getId())
+
+<a class="$identifier"
+   href="${movie.getMovieUrl()}"
+   data-width="${movie.getWidth()}"
+   data-height="${movie.getHeight()}"
+   data-firstFrame="${movie.getStaticImage()}">
+
+    #if($image)<img src="$image" title="Click to view video" />
+    #else
+       Click to play video
+    #end
+
+   </a>
+
+<script>
+
+    var loadVideo = function (videoproperties)
+    {
+
+
+
+        try{
+
+
+        var so = new SWFObject(
+                'http://www.nottingham.ac.uk/images/workspace/player.swf',
+                videoproperties.id,
+                videoproperties.width+'px',
+                videoproperties.height+'px',
+                '9');
+
+
+         so.addParam('allowfullscreen', 'true');
+         so.addParam('allowscriptaccess', 'always');
+         so.addParam('wmode', 'opaque');
+         so.addVariable('image', videoproperties.firstFrame);
+         so.addVariable('file', videoproperties.href);
+
+         return '<div class="videobox-container">'+so.getSWFHTML()+'</div>';
+        }
+        catch(e)
+        {
+           if(console !='undefined')
+               console.log(e);
+
+            return '<p>Sorry unable to load video</p>';
+        }
+    }
+
+AJS.toInit(function(){
+
+
+
+
+    AJS.$(".$identifier").click(function(e){
+
+
+        e.preventDefault();
+        var videoproperties   = {
+            'id':'video${identifier}',
+            'width': AJS.$(this).attr('data-width'),
+            'height':AJS.$(this).attr('data-height'),
+            'firstFrame': AJS.$(this).attr('data-firstFrame'),
+            'href':  AJS.$(this).attr('href')
+
+        } ;
+
+
+
+
+
+        var videoboxPopup${identifier} = new AJS.Dialog(#pad($movie.getWidth()), #pad($movie.getHeight()), 'videobox-dialog-${identifier}');
+        videoboxPopup${identifier}.addPanel('Video!', loadVideo(videoproperties));
+        videoboxPopup${identifier}.addButton('Close', function (dialog) {dialog.hide();AJS.$('#video${identifier}').remove()}, "aui-test-cancel-button");
+
+
+
+
+        videoboxPopup${identifier}.show();
+        AJS.$(".videobox-container").css('text-align','center');
+
+   });
+
+
+
+});
+</script>
+
